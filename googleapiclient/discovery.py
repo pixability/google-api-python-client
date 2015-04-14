@@ -859,7 +859,11 @@ Returns:
     request = copy.copy(previous_request)
 
     pageToken = previous_response['nextPageToken']
-    parsed = list(urlparse(request.uri))
+    try:
+        uri = request.uri.encode('utf-8')
+    except UnicodeDecodeError:
+        uri = request.uri
+    parsed = list(urlparse(uri))
     q = parse_qsl(parsed[4])
 
     # Find and remove old 'pageToken' value from URI
